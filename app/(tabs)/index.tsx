@@ -5,7 +5,7 @@ import React from 'react';
 import { useGetPokemonByNameQuery } from '../../src/api/pokemonApi';
 
 export default function HomeScreen() {
- const { data, error, isLoading } = useGetPokemonByNameQuery('bulbasaur');
+ const { data, error, isLoading,  } = useGetPokemonByNameQuery('bulbasaur');
 
  if(isLoading){
   return (
