@@ -2,12 +2,12 @@ import 'react-native-reanimated';
 
 import { DarkTheme, DefaultTheme, ThemeProvider } from '@react-navigation/native';
 
-import { useColorScheme } from '@/hooks/useColorScheme';
-import { store } from '@/src/store/store';
-import { useFonts } from 'expo-font';
+import { Provider } from 'react-redux';
 import { Stack } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
-import { Provider } from 'react-redux';
+import { store } from '@/src/store/pokemonStore';
+import { useColorScheme } from '@/hooks/useColorScheme';
+import { useFonts } from 'expo-font';
 
 export default function RootLayout() {
   const colorScheme = useColorScheme();
