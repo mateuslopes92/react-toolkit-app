@@ -1,33 +1,64 @@
-import { ActivityIndicator, Text, View } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { ActivityIndicator, Text, TextInput, View } from 'react-native';
 
 import { Image } from 'expo-image';
-import React from 'react';
 import { useGetPokemonByNameQuery } from '../../src/api/pokemonApi';
 
 export default function HomeScreen() {
- const { data, error, isLoading,  } = useGetPokemonByNameQuery('bulbasaur');
+  const [pokemonName, setPokemonName] = useState("");
+  const [debouncedName, setDebouncedName] = useState("");
 
- if(isLoading){
-  return (
-    <View style={{ padding: 60, justifyContent: 'center', alignItems: 'center' }}>
-      <ActivityIndicator color="white" />
-    </View>
-  )
- }
+  // Debounce logic
+  useEffect(() => {
+    const handler = setTimeout(() => {
+      setDebouncedName(pokemonName.trim().toLowerCase());
+    }, 500); // wait 500ms
 
- if(error){
-  return (
-    <View style={{ padding: 60, justifyContent: 'center', alignItems: 'center' }}>
-      <Text style={{color: 'white'}}>Error Fetching</Text>
-    </View>
-  )
- }
+    return () => clearTimeout(handler); // cleanup
+  }, [pokemonName]);
+
+  const { data, error, isLoading } = useGetPokemonByNameQuery(debouncedName, {
+    skip: debouncedName === "", // skip empty queries
+  });
+
+  console.log(JSON.stringify(data.sprites, null, 2))
 
   return (
     <View style={{ padding: 60, justifyContent: 'center', alignItems: 'center', flex: 1, width: "100%" }}>
-      <Text style={{color: 'white'}}>{data.species.name}</Text>
-      <Image source={data.sprites.front_shiny}  contentFit="cover" style={{   flex: 1,
-    width: '50%'}} />
+      <TextInput
+        value={pokemonName}
+        onChangeText={setPokemonName}
+        placeholderTextColor="white"
+        placeholder="Search a Pokémon"
+        style={{ color: "white", borderBottomWidth: 1, borderColor: "white", width: "80%", marginBottom: 20 }}
+      />
+
+      {isLoading && (
+        <ActivityIndicator color="white" />
+      )}
+
+      {error && (
+        <Text style={{ color: 'red', marginTop: 10 }}>Pokémon not found</Text>
+      )}
+
+      {data?.sprites?.front_default && (
+        <View
+          style={{
+            flexDirection: 'row',
+            alignItems: 'center',
+            padding: 20,
+            width: "100%",
+            marginVertical: 8,
+            justifyContent: 'space-between'
+          }}
+        >
+          <Image
+            source={`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${data.id}.png`}
+            style={{ width: 200, height: 200 }}
+            contentFit="contain"
+          />
+        </View>
+      )}
     </View>
   );
 }
