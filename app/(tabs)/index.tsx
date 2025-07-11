@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from 'react';
 import { ActivityIndicator, Text, TextInput, View } from 'react-native';
+import React, { useEffect, useState } from 'react';
 
 import { Image } from 'expo-image';
 import { useGetPokemonByNameQuery } from '../../src/api/pokemonApi';
@@ -21,7 +21,6 @@ export default function HomeScreen() {
     skip: debouncedName === "", // skip empty queries
   });
 
-  console.log(JSON.stringify(data.sprites, null, 2))
 
   return (
     <View style={{ padding: 60, justifyContent: 'center', alignItems: 'center', flex: 1, width: "100%" }}>

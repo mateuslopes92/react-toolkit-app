@@ -1,8 +1,8 @@
-import { useEffect, useState } from 'react';
 import { ActivityIndicator, FlatList, StyleSheet, Text, View } from 'react-native';
+import { useEffect, useState } from 'react';
 
-import { useGetPokemonListQuery } from '@/src/api/pokemonApi';
 import { Image } from 'expo-image';
+import { useGetPokemonListQuery } from '@/src/api/pokemonApi';
 
 const getIdFromUrl = (url) => {
   const parts = url.split('/');
@@ -87,7 +87,6 @@ export default function TabTwoScreen() {
         onEndReached={loadMore}
         onEndReachedThreshold={0.5}
         ListFooterComponent={isFetching ? <ActivityIndicator /> : null}
-        contentContainerStyle={{flex: 1, width: "100%"}}
         style={{flex: 1, width: "90%", borderTopColor: "#7159c1", borderTopWidth: 1 }}
       />
     </View>
