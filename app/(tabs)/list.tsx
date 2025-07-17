@@ -1,8 +1,10 @@
-import { ActivityIndicator, FlatList, StyleSheet, Text, View } from 'react-native';
+import { useAddFavoriteMutation, useGetFavoritesQuery } from '@/src/api/favoritesApi';
 import { useEffect, useState } from 'react';
+import { ActivityIndicator, FlatList, StyleSheet, Text, TouchableHighlight, View } from 'react-native';
 
-import { Image } from 'expo-image';
 import { useGetPokemonListQuery } from '@/src/api/pokemonApi';
+import Ionicons from '@expo/vector-icons/Ionicons';
+import { Image } from 'expo-image';
 
 const getIdFromUrl = (url) => {
   const parts = url.split('/');
@@ -13,6 +15,33 @@ const getImageUrl = (url) => {
   const id = getIdFromUrl(url);
   return `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${id}.png`;
 };
+
+
+
+const PAGE_SIZE = 10;
+
+export default function TabTwoScreen() {
+  const [offset, setOffset] = useState(0);
+  const [pokemons, setPokemons] = useState([]);
+  const [addFavorite] = useAddFavoriteMutation();
+  const { data: favorites } = useGetFavoritesQuery("favorites");
+  const favoriteListName = favorites?.map(fav => fav.name);
+  const { data, isLoading, isFetching, error } = useGetPokemonListQuery({
+    limit: PAGE_SIZE,
+    offset,
+  });
+
+  useEffect(() => {
+    if (data?.length) {
+      setPokemons((prev) => [...prev, ...data]);
+    }
+  }, [data]);
+
+  const loadMore = () => {
+    if (!isFetching) {
+      setOffset((prev) => prev + PAGE_SIZE);
+    }
+  };
 
   const renderItem = ({ item }) => (
     <View
@@ -35,31 +64,12 @@ const getImageUrl = (url) => {
         contentFit="contain"
       />
       <Text style={{ fontSize: 30, color: "white", textTransform: 'uppercase' }}>{item.name}</Text>
+      <TouchableHighlight onPress={() => addFavorite(item)}>
+        <Ionicons name={favoriteListName.includes(item.name) ? "heart" : "heart-outline"} size={32} color="white" />
+      </TouchableHighlight>
     </View>
   );
 
-
-const PAGE_SIZE = 10;
-
-export default function TabTwoScreen() {
-  const [offset, setOffset] = useState(0);
-  const [pokemons, setPokemons] = useState([]);
-  const { data, isLoading, isFetching, error } = useGetPokemonListQuery({
-    limit: PAGE_SIZE,
-    offset,
-  });
-
-  useEffect(() => {
-    if (data?.length) {
-      setPokemons((prev) => [...prev, ...data]);
-    }
-  }, [data]);
-
-  const loadMore = () => {
-    if (!isFetching) {
-      setOffset((prev) => prev + PAGE_SIZE);
-    }
-  };
 
   if(error){
     return (
