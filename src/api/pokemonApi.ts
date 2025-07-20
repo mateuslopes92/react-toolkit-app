@@ -4,6 +4,16 @@ import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
 export const pokemonApi = createApi({
   reducerPath: 'pokemonApi',
   baseQuery: fetchBaseQuery({ baseUrl: 'https://pokeapi.co/api/v2/' }),
+  // prepareHeader is being called before each request and can be used to handle tokens and headers in general
+  // we also can getState inside of headers preparation
+  // prepareHeaders: (headers, { getState }) => {
+  //     const token = (getState() as any).auth.token;
+  //     if (token) {
+  //       headers.set('authorization', `Bearer ${token}`);
+  //     }
+  //     return headers;
+  //   },
+  // }),
   endpoints: (builder) => ({
     getPokemonByName: builder.query<object, string>({
       query: (name) => `pokemon/${name}`,

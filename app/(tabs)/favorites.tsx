@@ -32,7 +32,7 @@ const Favorites: React.FC = () => {
   if(error){
     return (
       <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-        <Text style={styles.title}>Error getting pokemons {error}</Text>
+        <Text style={styles.title}>Error getting pokemons {JSON.stringify(error)}</Text>
       </View>
     )
   }
@@ -41,14 +41,6 @@ const Favorites: React.FC = () => {
     return (
       <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
         <Text style={styles.title}>No favorite pokemons</Text>
-      </View>
-    )
-  }
-
-  if(error){
-    return (
-      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-        <Text style={styles.title}>Error getting pokemons {error}</Text>
       </View>
     )
   }

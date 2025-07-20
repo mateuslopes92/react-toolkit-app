@@ -65,7 +65,7 @@ export default function TabTwoScreen() {
       />
       <Text style={{ fontSize: 30, color: "white", textTransform: 'uppercase' }}>{item.name}</Text>
       <TouchableHighlight onPress={() => addFavorite(item)}>
-        <Ionicons name={favoriteListName.includes(item.name) ? "heart" : "heart-outline"} size={32} color="white" />
+        <Ionicons name={favoriteListName?.includes(item.name) ? "heart" : "heart-outline"} size={32} color="white" />
       </TouchableHighlight>
     </View>
   );
